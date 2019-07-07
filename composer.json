@@ -1,0 +1,8 @@
+{
+    "require": {
+	"sakuraphp/sakura": "dev-master",
+        "dibi/dibi": "^4.0"
+
+    },
+    "minimum-stability": "dev"
+}

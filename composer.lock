@@ -1,0 +1,129 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "e3ddb245246864dfb66827abf6748c54",
+    "packages": [
+        {
+            "name": "dibi/dibi",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dg/dibi.git",
+                "reference": "219882a96215d08eb81374ae426525b5bc1cdb8c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dg/dibi/zipball/219882a96215d08eb81374ae426525b5bc1cdb8c",
+                "reference": "219882a96215d08eb81374ae426525b5bc1cdb8c",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1"
+            },
+            "replace": {
+                "dg/dibi": "*"
+            },
+            "require-dev": {
+                "nette/tester": "~2.0",
+                "tracy/tracy": "~2.2"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "4.0-dev"
+                }
+            },
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause",
+                "GPL-2.0",
+                "GPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "David Grudl",
+                    "homepage": "https://davidgrudl.com"
+                }
+            ],
+            "description": "Dibi is Database Abstraction Library for PHP",
+            "homepage": "https://dibiphp.com",
+            "keywords": [
+                "access",
+                "database",
+                "dbal",
+                "mssql",
+                "mysql",
+                "odbc",
+                "oracle",
+                "pdo",
+                "postgresql",
+                "sqlite",
+                "sqlsrv"
+            ],
+            "time": "2019-05-29T11:44:50+00:00"
+        },
+        {
+            "name": "sakuraphp/sakura",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nikolaslada/sakura.git",
+                "reference": "558114f8266be9b7cb87b672985b68e5e062b0ec"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nikolaslada/sakura/zipball/558114f8266be9b7cb87b672985b68e5e062b0ec",
+                "reference": "558114f8266be9b7cb87b672985b68e5e062b0ec",
+                "shasum": ""
+            },
+            "require-dev": {
+                "phpstan/phpstan": "^0.11.5",
+                "phpunit/phpunit": "^8.1"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0",
+                "GPL-3.0",
+                "LGPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Nikolas Lada",
+                    "homepage": "http://www.nikolaslada.cz"
+                }
+            ],
+            "description": "Sakura library contains implementations of 4 methods, which can manage different types of hierarchical structure (tree) on relational database.",
+            "homepage": "http://sakuraphp.com",
+            "keywords": [
+                "database",
+                "traversal",
+                "tree"
+            ],
+            "time": "2019-04-17T12:03:50+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "dev",
+    "stability-flags": {
+        "sakuraphp/sakura": 20
+    },
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": []
+}
