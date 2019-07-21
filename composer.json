@@ -1,8 +1,10 @@
 {
     "require": {
-	"sakuraphp/sakura": "dev-master",
+        "sakuraphp/sakura": "dev-master",
         "dibi/dibi": "^4.0"
-
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "require-dev": {
+        "phpunit/phpunit": "^8.3@dev"
+    }
 }
