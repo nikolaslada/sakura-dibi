@@ -9,6 +9,7 @@ use Sakura\Order\Table;
 use Sakura\Order\INode;
 use Dibi\Connection;
 use Dibi\Result;
+use Dibi\Row;
 use Sakura\Order\NodeList;
 
 final class Repository implements IRepository
@@ -65,19 +66,22 @@ final class Repository implements IRepository
     public function getBranch(int $fromOrder, int $toOrder, ?int $maxDepth): NodeList
     {
         $sql = "SELECT * FROM %n WHERE %n >= ? AND %n <= ?";
+        $sqlOrderBy = " ORDER BY %n ASC";
         $orderCol = $this->table->getOrderColumn();
         
         if (\is_null($maxDepth))
         {
+            $sql = $sql . $sqlOrderBy;
             $result = $this->connection->query(
                 $sql,
                 $this->table->getName(),
                 $orderCol,
                 $fromOrder,
                 $orderCol,
-                $toOrder);
+                $toOrder,
+                $orderCol);
         } else {
-            $sql .= " AND %n <= ?";
+            $sql = $sql . " AND %n <= ?" . $sqlOrderBy;
             $result = $this->connection->query(
                 $sql,
                 $this->table->getName(),
@@ -86,7 +90,8 @@ final class Repository implements IRepository
                 $orderCol,
                 $toOrder,
                 $this->table->getDepthColumn(),
-                $maxDepth);
+                $maxDepth,
+                $orderCol);
         }
         
         return $this->getNodeList($result);
@@ -115,26 +120,33 @@ final class Repository implements IRepository
             $minDepth);
     }
 
-    public function getNodeById(int $id): INode
+    public function getNodeById(int $id): ?INode
     {
         $row = $this->connection->fetch(
             "SELECT * FROM %n WHERE %n = ?",
             $this->table->getName(),
             $this->table->getIdColumn(),
             $id);
-        $node = $this->factory->createNode($row, $this->table);
-        return $node;
+        return $this->getNode($row);
     }
 
-    public function getNodeByOrder(int $order): INode
+    public function getNodeByOrder(int $order): ?INode
     {
         $row = $this->connection->fetch(
             "SELECT * FROM %n WHERE %n = ?",
             $this->table->getName(),
             $this->table->getOrderColumn(),
             $order);
-        $node = $this->factory->createNode($row, $this->table);
-        return $node;
+        return $this->getNode($row);
+    }
+
+    private function getNode(?Row $row): ?INode
+    {
+        if (\is_null($row)) {
+            return \null;
+        } else {
+            return $this->factory->createNode($row, $this->table);
+        }
     }
 
     public function getNodesByParent(int $parent): NodeList
