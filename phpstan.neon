@@ -1,0 +1,7 @@
+parameters:
+    autoload_directories:
+        - src
+        - tests
+        - vendor/sakuraphp/sakura/src
+        - vendor/nette/bootstrap/src
+        - vendor/nette/di/src
