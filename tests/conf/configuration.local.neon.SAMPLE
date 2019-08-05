@@ -1,0 +1,7 @@
+parameters:
+    dibi:
+        host: 127.0.0.1
+        username: sakura
+        password: password
+        database: sakura
+        lazy: true
