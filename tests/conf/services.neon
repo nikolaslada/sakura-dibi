@@ -1,0 +1,2 @@
+services:
+    - Dibi\Connection(%dibi%)
