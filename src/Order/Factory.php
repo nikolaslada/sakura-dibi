@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace SakuraDibi\Order;
 
 use Sakura\Order\Table;
+use Sakura\Order\INode;
 use Sakura\Order\Node;
+use Dibi\Row;
 
 final class Factory implements IFactory
 {
 
-    public function createNode(\stdClass $row, Table $table): Node
+    public function createNode(Row $row, Table $table): INode
     {
         $id = $table->getIdColumn();
         $depth = $table->getDepthColumn();

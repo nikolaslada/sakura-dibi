@@ -6,9 +6,10 @@ namespace SakuraDibi\Order;
 
 use Sakura\Order\Table;
 use Sakura\Order\INode;
+use Dibi\Row;
 
 interface IFactory {
 
-    public function createNode(array $row, Table $table): INode;
+    public function createNode(Row $row, Table $table): INode;
 
 }
