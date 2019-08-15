@@ -1,7 +1,7 @@
 services:
     - Dibi\Connection(%dibi%)
     - \Sakura\Order\Factory
-    - \Sakura\Order\Table(%order.name%, %order.id%, %order.order%, %order.depth%, %order.parent%)
+    - \Sakura\Order\Table(%order.name%, %order.id%, %order.depth%, %order.order%, %order.parent%)
     - \SakuraDibi\Order\Factory
     - \SakuraDibi\Order\Repository
     - \Sakura\Order\Tree
