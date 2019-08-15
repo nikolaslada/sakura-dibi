@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace SakuraDibi\Order;
 
+use Sakura\Exceptions;
 use Sakura\Order\IRepository;
 use Sakura\Order\Table;
 use Sakura\Order\INode;
+use Sakura\Order\NodeList;
 use Dibi\Connection;
 use Dibi\Result;
 use Dibi\Row;
-use Sakura\Order\NodeList;
 
 final class Repository implements IRepository
 {
@@ -41,7 +42,7 @@ final class Repository implements IRepository
             "INSERT INTO %n %v",
             $this->table->getName(),
             $data);
-        $result->getRowCount();
+        return $this->connection->getInsertId();
     }
 
     public function beginTransaction(): void
@@ -54,13 +55,19 @@ final class Repository implements IRepository
         $this->connection->commit();
     }
 
-    public function delete(int $id)
+    public function rollbackTransaction(): void
+    {
+        $this->connection->rollback();
+    }
+
+    public function delete(int $id): int
     {
         $this->connection->query(
             "DELETE FROM %n WHERE %n = ?",
             $this->table->getName(),
             $this->table->getIdColumn(),
             $id);
+        return $this->connection->getAffectedRows();
     }
 
     public function getBranch(int $fromOrder, int $toOrder, ?int $maxDepth): NodeList
@@ -107,17 +114,37 @@ final class Repository implements IRepository
             $id);
     }
 
-    public function getEndNode(int $startOrder, int $minDepth): int
+    /**
+     * @throws Exceptions\NoExpectedNodeException
+     */
+    public function getEndOrder(int $startOrder, int $startDepth): int
     {
-        $orderCol = $this->table->getOrderColumn();
-        return $this->connection->fetchSingle(
-            "SELECT MAX(%n) FROM %n WHERE %n >= ? AND %n >= ?",
-            $orderCol,
-            $this->table->getName(),
+        $row = $this->connection->fetch(
+            "SELECT
+                (SELECT MIN(`x`.%n) FROM %n AS x WHERE `x`.%n > ? AND `x`.%n <= ?) AS min,
+                (SELECT MAX(`y`.%n) FROM %n AS y WHERE `y`.%n >= ? AND `y`.%n >= ?) AS max",
+            $orderCol = $this->table->getOrderColumn(),
+            $name = $this->table->getName(),
             $orderCol,
             $startOrder,
-            $this->table->getDepthColumn(),
-            $minDepth);
+            $depth = $this->table->getDepthColumn(),
+            $startDepth,
+            $orderCol,
+            $name,
+            $orderCol,
+            $startOrder,
+            $depth,
+            $startDepth);
+
+        if (\is_null($row)) {
+            throw new Exceptions\NoExpectedNodeException;
+        } elseif (\is_null($row['min']) && \is_null($row['max'])) {
+            throw new Exceptions\NoExpectedNodeException;
+        } elseif (\is_null($row['min'])) {
+          return $row['max'];
+        } else {
+          return $row['min'] -1;
+        }
     }
 
     public function getNodeById(int $id): ?INode
@@ -168,7 +195,7 @@ final class Repository implements IRepository
             $nodeId);
     }
 
-    public function updateByIdList(array $whereIdList, ?int $setParent): int
+    public function updateParentByIdList(array $whereIdList, ?int $setParent): int
     {
         $this->connection->query(
             "UPDATE %n SET %n = ? WHERE %n IN (?)",
@@ -182,35 +209,52 @@ final class Repository implements IRepository
 
     public function updateByOrder(int $fromOrder, ?int $toOrder, int $orderMovement, int $depthMovement): int
     {
-        if ($orderMovement < 0)
-        {
-            $orderSign = "-";
-        } else {
-            $orderSign = "+";
-        }
-        
-        if ($depthMovement < 0)
-        {
-            $depthSign = "-";
-        } else {
-            $depthSign = "+";
-        }
-        
-        $orderCol = $this->table->getOrderColumn();
-        $depthCol = $this->table->getDepthColumn();
-        $this->connection->query(
-            "UPDATE %n SET %n = %n $orderSign ?, %n = %n $depthSign ? WHERE %n >= ? AND %n <= ?",
+        $args = [
+            '',
             $this->table->getName(),
-            $orderCol,
+            $orderCol = $this->table->getOrderColumn(),
             $orderCol,
             $orderMovement,
-            $depthCol,
-            $depthCol,
-            $depthMovement,
-            $orderCol,
-            $fromOrder,
-            $orderCol,
-            $toOrder);
+        ];
+
+        if ($orderMovement < 0) {
+            $orderSign = "";
+            $orderBy = "ASC";
+        } else {
+            $orderSign = "+";
+            $orderBy = "DESC";
+        }
+
+        if ($depthMovement === 0) {
+            $depthSql = "";
+        } else {
+            if ($depthMovement < 0) {
+                $depthSql = ", %n = %n ?";
+            } else {
+                $depthSql = ", %n = %n + ?";
+            }
+
+            $args[] = $depthCol = $this->table->getDepthColumn();
+            $args[] = $depthCol;
+            $args[] = $depthMovement;
+        }
+
+        $args[] = $orderCol;
+        $args[] = $fromOrder;
+
+        if (\is_null($toOrder))
+        {
+            $toOrderSql = "";
+        } else {
+            $toOrderSql = " AND %n <= ?";
+            $args[] = $orderCol;
+            $args[] = $toOrder;
+        }
+
+        $sql = "UPDATE %n SET %n = %n $orderSign ? $depthSql WHERE %n >= ? $toOrderSql ORDER BY %n $orderBy";
+        $args[0] = $sql;
+        $args[] = $orderCol;
+        $this->connection->query($args);
         return $this->connection->getAffectedRows();
     }
 
