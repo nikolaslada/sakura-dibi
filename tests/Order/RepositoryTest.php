@@ -180,10 +180,10 @@ class RepositoryTest extends \Tests\Base\TestCase
         $nodeA2 = $this->tree->getNode(3);
         $this->assertSame(\null, $nodeA2);
 
-        $nodeA2 = $this->tree->getNode(6);
-        $this->assertSame(4, $nodeA2->getOrder());
-        $this->assertSame(1, $nodeA2->getDepth());
-        $this->assertSame(1, $nodeA2->getParent());
+        $nodeA3 = $this->tree->getNode(6);
+        $this->assertSame(4, $nodeA3->getOrder());
+        $this->assertSame(1, $nodeA3->getDepth());
+        $this->assertSame(1, $nodeA3->getParent());
     }
 
     /** @depends testRemoveNode */
@@ -210,7 +210,7 @@ class RepositoryTest extends \Tests\Base\TestCase
         $this->expectException(\Sakura\Exceptions\BadArgumentException::class);
         $nodeC1 = $this->tree->getNode(9);
         $goalC = $this->tree->getNode(13);
-        $this->tree->moveBranchAfter($nodeC1, $goalC);
+        $this->tree->moveBranchAsFirstChild($nodeC1, $goalC);
     }
 
     /** @depends testMoveBranchAsFirstChild */
