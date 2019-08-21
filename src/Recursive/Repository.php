@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SakuraDibi\Recursive;
 
+use Sakura\Exceptions;
 use Sakura\Recursive\IRepository;
 use Sakura\Recursive\Table;
 use Sakura\Recursive\INode;
@@ -22,9 +23,9 @@ final class Repository implements IRepository  {
 
 
     public function __construct(
-            IFactory $factory,
-            Table $table,
-            Connection $connection)
+        IFactory $factory,
+        Table $table,
+        Connection $connection)
     {
         $this->factory = $factory;
         $this->table = $table;
@@ -33,11 +34,11 @@ final class Repository implements IRepository  {
 
     public function addData(array $data): int
     {
-        $result = $this->connection->query(
+        $this->connection->query(
             "INSERT INTO %n %v",
             $this->table->getName(),
             $data);
-        $result->getRowCount();
+        return $this->connection->getInsertId();
     }
 
     public function beginTransaction(): void
@@ -59,23 +60,60 @@ final class Repository implements IRepository  {
             $id);
     }
 
-    public function getChildsByParent(int $id): array {
-        return $this->connection->fetchAll(
+    public function getNodesByParent(int $parent): array
+    {
+        $list = [];
+        $result = $this->connection->query(
             "SELECT * FROM %n WHERE %n = ?",
             $this->table->getName(),
             $this->table->getParentColumn(),
-            $id);
+            $parent);
+
+        if ($result->getRowCount() === 0) {
+            return $list;
+        } else {
+            foreach ($result as $row) {
+                $list[] = $this->factory->createNode($row, $this->table);
+            }
+
+            return $list;
+        }
     }
 
-    public function getNodeById(int $id): INode
+    public function getIdsByParent(int $parent): array
+    {
+        $result = $this->connection->query(
+            "SELECT %n FROM %n WHERE %n = ?",
+            $this->table->getIdColumn(),
+            $this->table->getName(),
+            $this->table->getParentColumn(),
+            $parent);
+        $list = [];
+        
+        if ($result->getRowCount() === 0) {
+            return $list;
+        } else {
+            foreach ($result as $row) {
+                $list[] = $row->{$this->table->getIdColumn()};
+            }
+
+            return $list;
+        }
+    }
+
+    public function getNodeById(int $id): ?INode
     {
         $row = $this->connection->fetch(
             "SELECT * FROM %n WHERE %n = ?",
             $this->table->getName(),
             $this->table->getIdColumn(),
             $id);
-        $node = $this->factory->createNode($row, $this->table);
-        return $node;
+
+        if (\is_null($row)) {
+            return \null;
+        } else {
+            return $this->factory->createNode($row, $this->table);
+        }
     }
 
     public function getNumberOfChilds(int $nodeId): int
@@ -99,36 +137,37 @@ final class Repository implements IRepository  {
             $id);
         return (int) $row[$p];
     }
-    
-    private function getNode(?int $id): INode
-    {
-        $row = $this->connection->fetch(
-            "SELECT * FROM %n WHERE %n = ?",
-            $this->table->getName(),
-            $this->table->getIdColumn(),
-            $id);
-        $node = $this->factory->createNode($row, $this->table);
-        return $node;
-    }
 
-    public function getParentNode(int $id): INode
-    {
-        return $this->getNode($id);
-    }
-
+    /**
+     * @throws Exceptions\NoRootException
+     */
     public function getRoot(): INode
     {
-        return $this->getNode(\null);
+        $list = $this->connection->fetchAll(
+            "SELECT * FROM %n WHERE %n IS NULL",
+            $this->table->getName(),
+            $this->table->getParentColumn());
+        $count = \count($list);
+
+        if ($count === 0) {
+            throw new Exceptions\NoRootException('No root found in ' . $this->table->getName() . ' table.');
+        } elseif ($count > 1) {
+            throw new Exceptions\NoRootException('There is broken root or whole tree in ' . $this->table->getName() . ' table.');
+        } else {
+            return $this->factory->createNode($list[0], $this->table);
+        }
     }
 
-    public function updateNode(int $setParent, int ...$whereId): void
+    public function updateParentByIdList(array $whereIdList, ?int $setParent): int
     {
-        $this->connection->query("UPDATE %n SET %n = ? WHERE %n IN (?)",
+        $this->connection->query(
+            "UPDATE %n SET %n = ? WHERE %n IN (?)",
             $this->table->getName(),
             $this->table->getParentColumn(),
             $setParent,
             $this->table->getIdColumn(),
-            $whereId);
+            $whereIdList);
+        return $this->connection->getAffectedRows();
     }
 
 }
