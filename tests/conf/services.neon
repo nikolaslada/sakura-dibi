@@ -5,3 +5,8 @@ services:
     - \SakuraDibi\Order\Factory
     - \SakuraDibi\Order\Repository
     - \Sakura\Order\Tree
+    - \Sakura\Recursive\Factory
+    - \Sakura\Recursive\Table(%recursive.name%, %recursive.id%, %recursive.parent%)
+    - \SakuraDibi\Recursive\Factory
+    - \SakuraDibi\Recursive\Repository
+    - \Sakura\Recursive\Tree

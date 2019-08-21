@@ -17,4 +17,3 @@ INSERT INTO `recursive` (`id`, `parent`, `name`) VALUES
 (11,	8,	'BranchCAB'),
 (12,	9,	'BranchCBA'),
 (13,	9,	'BranchCBB');
-
