@@ -222,48 +222,27 @@ class RepositoryTest extends \Tests\Base\TestCase
     public function testBranch(): void
     {
         $root = $this->tree->getRoot();
-        $nodeList = $this->tree->getBranch($root);
-        $this->assertSame(14, $nodeList->count());
-        $this->assertSame(1, $nodeList->current()->getId());
+        $branch = $this->tree->getBranch($root);
+        $this->assertSame(5, $branch->count());
+        $this->assertSame(1, $branch->getRootNode()->getId());
 
-        $nodeList->next();
-        $this->assertSame(15, $nodeList->current()->getId());
+        $this->assertSame(2, $branch->current()->getRootNode()->getId());
 
-        $nodeList->next();
-        $this->assertSame(2, $nodeList->current()->getId());
+        $branch->next();
+        $this->assertSame(5, $branch->current()->getRootNode()->getId());
 
-        $nodeList->next();
-        $this->assertSame(9, $nodeList->current()->getId());
+        $branch->next();
+        $branch6 = $branch->current();
+        $this->assertSame(6, $branch6->getRootNode()->getId());
+        $branch4 = $branch6->current();
+        $this->assertSame(4, $branch4->getRootNode()->getId());
 
-        $nodeList->next();
-        $this->assertSame(13, $nodeList->current()->getId());
+        $branch8 = $branch4->current();
+        $this->assertSame(8, $branch8->getRootNode()->getId());
+        $this->assertSame(10, $branch8->current()->getRootNode()->getId());
 
-        $nodeList->next();
-        $this->assertSame(6, $nodeList->current()->getId());
-
-        $nodeList->next();
-        $this->assertSame(7, $nodeList->current()->getId());
-
-        $nodeList->next();
-        $this->assertSame(4, $nodeList->current()->getId());
-
-        $nodeList->next();
-        $this->assertSame(12, $nodeList->current()->getId());
-
-        $nodeList->next();
-        $this->assertSame(8, $nodeList->current()->getId());
-
-        $nodeList->next();
-        $this->assertSame(10, $nodeList->current()->getId());
-
-        $nodeList->next();
-        $this->assertSame(11, $nodeList->current()->getId());
-
-        $nodeList->next();
-        $this->assertSame(5, $nodeList->current()->getId());
-
-        $nodeList->next();
-        $this->assertSame(14, $nodeList->current()->getId());
+        $branch8->next();
+        $this->assertSame(11, $branch8->current()->getRootNode()->getId());
     }
 
 }
