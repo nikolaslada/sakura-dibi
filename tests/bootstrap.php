@@ -16,6 +16,7 @@ $configurator
     ->createRobotLoader()
     ->addDirectory(__DIR__ . '/../src/Order')
     ->addDirectory(__DIR__ . '/../src/Recursive')
+    ->addDirectory(__DIR__ . '/../src/Traversal')
     ->addDirectory(__DIR__ . '/Base')
     ->register();
 

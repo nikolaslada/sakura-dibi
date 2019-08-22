@@ -9,3 +9,9 @@ parameters:
         name: recursive
         id: id
         parent: parent
+    traversal:
+        name: traversal
+        id: id
+        left: left
+        right: right
+        parent: parent
