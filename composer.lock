@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "e45855899054455511db9aac140c4450",
+    "content-hash": "aa06017d2d3caddb5261ee99612c99b0",
     "packages": [
         {
             "name": "dibi/dibi",
@@ -76,17 +76,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikolaslada/sakura.git",
-                "reference": "3776f1421927774403934c6e78c13860310fa038"
+                "reference": "ebb5788879ceb12792e120eba51ae4822d2f13bd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikolaslada/sakura/zipball/3776f1421927774403934c6e78c13860310fa038",
-                "reference": "3776f1421927774403934c6e78c13860310fa038",
+                "url": "https://api.github.com/repos/nikolaslada/sakura/zipball/ebb5788879ceb12792e120eba51ae4822d2f13bd",
+                "reference": "ebb5788879ceb12792e120eba51ae4822d2f13bd",
                 "shasum": ""
             },
             "require-dev": {
-                "phpstan/phpstan": "^0.11.5",
-                "phpunit/phpunit": "^8.1"
+                "phpstan/phpstan-shim": "^0.11.12"
             },
             "type": "library",
             "autoload": {
@@ -113,7 +112,7 @@
                 "traversal",
                 "tree"
             ],
-            "time": "2019-08-05T19:36:36+00:00"
+            "time": "2019-08-22T06:27:00+00:00"
         }
     ],
     "packages-dev": [

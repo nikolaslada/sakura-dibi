@@ -1,7 +1,7 @@
 {
     "require": {
         "php": ">= 7.1",
-        "sakuraphp/sakura": "dev-master#3776f1421927774403934c6e78c13860310fa038",
+        "sakuraphp/sakura": "dev-master#ebb5788879ceb12792e120eba51ae4822d2f13bd",
         "dibi/dibi": "^4.0"
     },
     "minimum-stability": "dev",
