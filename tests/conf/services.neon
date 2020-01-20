@@ -11,7 +11,7 @@ services:
     - \SakuraDibi\Recursive\Repository
     - \Sakura\Recursive\Tree
     - \Sakura\Traversal\Factory
-    - \Sakura\Traversal\Table(%traversal.name%, %traversal.id%, %recursive.left%, %recursive.right%, %recursive.parent%)
+    - \Sakura\Traversal\Table(%traversal.name%, %traversal.id%, %traversal.left%, %traversal.right%, %traversal.parent%)
     - \SakuraDibi\Traversal\Factory
     - \SakuraDibi\Traversal\Repository
     - \Sakura\Traversal\Tree
