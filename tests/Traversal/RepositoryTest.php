@@ -317,4 +317,15 @@ class RepositoryTest extends \Tests\Base\TestCase
         $this->assertSame(14, $nodeList->current()->getId());
     }
 
+    /** @depends testBranch */
+    public function testGetNodeListByParent(): void
+    {
+        $root = $this->tree->getRoot();
+        $nodeListA = $this->tree->getNodeListByParent($root->getId());
+        $this->assertSame(5, $nodeListA->count());
+        
+        $nodeListB = $this->tree->getNodeListByParent(9);
+        $this->assertSame(13, $nodeListB->current()->getId());
+    }
+
 }

@@ -108,7 +108,14 @@ final class Repository implements IRepository
         }
     }
 
-    public function getNodesByParent(int $parent): NodeList {
+    public function getNodeListByParent(int $parent): NodeList
+    {
+        $result = $this->connection->query(
+            "SELECT * FROM %n WHERE %n = ?",
+            $this->table->getName(),
+            $this->table->getParentColumn(),
+            $parent);
+        return $this->getNodeList($result);
     }
 
     public function getLevel(INode $node): ?int
