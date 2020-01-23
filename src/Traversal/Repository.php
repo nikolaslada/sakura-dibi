@@ -117,23 +117,6 @@ final class Repository implements IRepository
         return $this->getNodeList($result);
     }
 
-    public function getLevel(INode $node): ?int
-    {
-        $row = $this->connection->fetch(
-            "SELECT COUNT(*) AS level FROM %n WHERE %n <= ? AND %n >= ?",
-            $this->table->getName(),
-            $this->table->getLeftColumn(),
-            $node->getLeft(),
-            $this->table->getRightColumn(),
-            $node->getRight());
-
-        if (\is_null($row)) {
-            return \null;
-        } else {
-            return $row['level'];
-        }
-    }
-
     public function getNumberOfChilds(int $id): int
     {
         $row = $this->connection->fetch(
