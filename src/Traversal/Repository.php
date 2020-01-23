@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace SakuraDibi\Traversal;
 
-use Sakura\Exceptions;
 use Sakura\Traversal\IRepository;
 use Sakura\Traversal\Table;
 use Sakura\Traversal\INode;
