@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "aa06017d2d3caddb5261ee99612c99b0",
+    "content-hash": "874435d22d255ae7196f57e9ab398f1a",
     "packages": [
         {
             "name": "dibi/dibi",
@@ -76,12 +76,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikolaslada/sakura.git",
-                "reference": "ebb5788879ceb12792e120eba51ae4822d2f13bd"
+                "reference": "56414809586eaf1d6e9d7ff25a7819df5f5fc55a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikolaslada/sakura/zipball/ebb5788879ceb12792e120eba51ae4822d2f13bd",
-                "reference": "ebb5788879ceb12792e120eba51ae4822d2f13bd",
+                "url": "https://api.github.com/repos/nikolaslada/sakura/zipball/56414809586eaf1d6e9d7ff25a7819df5f5fc55a",
+                "reference": "56414809586eaf1d6e9d7ff25a7819df5f5fc55a",
                 "shasum": ""
             },
             "require-dev": {
@@ -89,9 +89,9 @@
             },
             "type": "library",
             "autoload": {
-                "classmap": [
-                    "src/"
-                ]
+                "psr-4": {
+                    "Sakura\\": "src/"
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -105,14 +105,16 @@
                     "homepage": "http://www.nikolaslada.cz"
                 }
             ],
-            "description": "Sakura library contains implementations of 4 methods, which can manage different types of hierarchical structure (tree) on relational database.",
-            "homepage": "http://sakuraphp.com",
+            "description": "Sakura library contains implementations of 3 methods, which can manage different types of hierarchical structure (tree) on relational database.",
+            "homepage": "https://github.com/nikolaslada/sakura",
             "keywords": [
                 "database",
+                "hierarchical",
+                "rdbms",
                 "traversal",
                 "tree"
             ],
-            "time": "2019-08-22T06:27:00+00:00"
+            "time": "2020-01-26T20:42:53+00:00"
         }
     ],
     "packages-dev": [
@@ -1060,50 +1062,6 @@
                 "stub"
             ],
             "time": "2019-06-13T12:50:23+00:00"
-        },
-        {
-            "name": "phpstan/phpstan-shim",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/phpstan/phpstan-shim.git",
-                "reference": "3dac700aa9d1ee9fc2a0627b076cbdb1518a910c"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan-shim/zipball/3dac700aa9d1ee9fc2a0627b076cbdb1518a910c",
-                "reference": "3dac700aa9d1ee9fc2a0627b076cbdb1518a910c",
-                "shasum": ""
-            },
-            "require": {
-                "php": "~7.1"
-            },
-            "replace": {
-                "nikic/php-parser": "^4.0.2",
-                "phpstan/phpdoc-parser": "^0.3.3",
-                "phpstan/phpstan": "self.version"
-            },
-            "bin": [
-                "phpstan",
-                "phpstan.phar"
-            ],
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "0.12-dev"
-                }
-            },
-            "autoload": {
-                "files": [
-                    "bootstrap.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "PHPStan Phar distribution",
-            "time": "2019-08-04T11:40:59+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -2210,7 +2168,6 @@
     "stability-flags": {
         "sakuraphp/sakura": 20,
         "phpunit/phpunit": 20,
-        "phpstan/phpstan-shim": 20,
         "nette/di": 20,
         "nette/bootstrap": 20
     },

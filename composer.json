@@ -1,13 +1,12 @@
 {
     "require": {
         "php": ">= 7.1",
-        "sakuraphp/sakura": "dev-master#ebb5788879ceb12792e120eba51ae4822d2f13bd",
+        "sakuraphp/sakura": "dev-master#56414809586eaf1d6e9d7ff25a7819df5f5fc55a",
         "dibi/dibi": "^4.0"
     },
     "minimum-stability": "dev",
     "require-dev": {
         "phpunit/phpunit": "^8.3@dev",
-        "phpstan/phpstan-shim": "^0.12.0@dev",
         "nette/di": "^3.0@dev",
         "nette/bootstrap": "^3.0@dev"
     },
