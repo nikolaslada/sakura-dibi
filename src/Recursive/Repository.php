@@ -8,7 +8,9 @@ use Sakura\Exceptions;
 use Sakura\Recursive\IRepository;
 use Sakura\Recursive\Table;
 use Sakura\Recursive\INode;
+use Sakura\Recursive\NodeList;
 use Dibi\Connection;
+use Dibi\Result;
 
 final class Repository implements IRepository  {
 
@@ -60,27 +62,17 @@ final class Repository implements IRepository  {
             $id);
     }
 
-    public function getNodesByParent(int $parent): array
+    public function getNodeListByParent(int $parent): NodeList
     {
-        $list = [];
         $result = $this->connection->query(
             "SELECT * FROM %n WHERE %n = ?",
             $this->table->getName(),
             $this->table->getParentColumn(),
             $parent);
-
-        if ($result->getRowCount() === 0) {
-            return $list;
-        } else {
-            foreach ($result as $row) {
-                $list[] = $this->factory->createNode($row, $this->table);
-            }
-
-            return $list;
-        }
+        return $this->getNodeList($result);
     }
 
-    public function getIdsByParent(int $parent): array
+    public function getIdListByParent(int $parent): array
     {
         $result = $this->connection->query(
             "SELECT %n FROM %n WHERE %n = ?",
@@ -168,6 +160,18 @@ final class Repository implements IRepository  {
             $this->table->getIdColumn(),
             $whereIdList);
         return $this->connection->getAffectedRows();
+    }
+
+    private function getNodeList(Result $result): NodeList
+    {
+        $list = [];
+        foreach ($result as $row)
+        {
+            $list[] = $this->factory->createNode($row, $this->table);
+        }
+        
+        $nodeList = new NodeList($list);
+        return $nodeList;
     }
 
 }
