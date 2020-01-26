@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "874435d22d255ae7196f57e9ab398f1a",
+    "content-hash": "81d990c8bb5a14fa77d3fda16b952c67",
     "packages": [
         {
             "name": "dibi/dibi",
@@ -72,20 +72,17 @@
         },
         {
             "name": "sakuraphp/sakura",
-            "version": "dev-master",
+            "version": "2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikolaslada/sakura.git",
-                "reference": "56414809586eaf1d6e9d7ff25a7819df5f5fc55a"
+                "reference": "711c40aa7b0789dea1d905ea732826fc7c0975f0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikolaslada/sakura/zipball/56414809586eaf1d6e9d7ff25a7819df5f5fc55a",
-                "reference": "56414809586eaf1d6e9d7ff25a7819df5f5fc55a",
+                "url": "https://api.github.com/repos/nikolaslada/sakura/zipball/711c40aa7b0789dea1d905ea732826fc7c0975f0",
+                "reference": "711c40aa7b0789dea1d905ea732826fc7c0975f0",
                 "shasum": ""
-            },
-            "require-dev": {
-                "phpstan/phpstan-shim": "^0.11.12"
             },
             "type": "library",
             "autoload": {
@@ -114,7 +111,7 @@
                 "traversal",
                 "tree"
             ],
-            "time": "2020-01-26T20:42:53+00:00"
+            "time": "2020-01-26T21:11:51+00:00"
         }
     ],
     "packages-dev": [
@@ -2166,7 +2163,6 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "sakuraphp/sakura": 20,
         "phpunit/phpunit": 20,
         "nette/di": 20,
         "nette/bootstrap": 20
