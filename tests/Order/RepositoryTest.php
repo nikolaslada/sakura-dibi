@@ -51,8 +51,8 @@ class RepositoryTest extends \Tests\Base\TestCase
     /** @dataProvider dataDepthValue */
     public function testDepth($id, $expectedDepth): void
     {
-        $node = $this->tree->getNode($id);
-        $this->assertSame($expectedDepth, $node->getDepth());
+        $depth = $this->tree->getDepth($id);
+        $this->assertSame($expectedDepth, $depth);
     }
 
     public function dataDepthValue(): array
@@ -189,23 +189,50 @@ class RepositoryTest extends \Tests\Base\TestCase
     /** @depends testRemoveNode */
     public function testMoveBranchAsFirstChild(): void
     {
-        $nodeA1 = $this->tree->getNode(12);
-        $goalA = $this->tree->getNode(4);
-        $this->tree->moveBranchAsFirstChild($nodeA1, $goalA);
+        $firstNodeInCurrenBefore = $this->tree->getNode(7);
+        $goalBranch = $this->tree->getNode(6);
+        $this->tree->moveBranchAsFirstChild($firstNodeInCurrenBefore, $goalBranch);
+        
+        $firstNodeInBranchAfter = $this->tree->getNode(7);
+        $this->assertSame(5, $firstNodeInBranchAfter->getOrder());
+        $this->assertSame(2, $firstNodeInBranchAfter->getDepth());
+        $this->assertSame(6, $firstNodeInBranchAfter->getParent());
+        
+        $nodeInsideBranchBefore = $this->tree->getNode(12);
+        $goalOutsideBranch = $this->tree->getNode(4);
+        $this->tree->moveBranchAsFirstChild($nodeInsideBranchBefore, $goalOutsideBranch);
 
-        $nodeA2 = $this->tree->getNode(12);
-        $this->assertSame(7, $nodeA2->getOrder());
-        $this->assertSame(2, $nodeA2->getDepth());
-        $this->assertSame(4, $nodeA2->getParent());
+        $nodeInsideBranchAfter = $this->tree->getNode(12);
+        $this->assertSame(7, $nodeInsideBranchAfter->getOrder());
+        $this->assertSame(2, $nodeInsideBranchAfter->getDepth());
+        $this->assertSame(4, $nodeInsideBranchAfter->getParent());
 
-        $nodeB1 = $this->tree->getNode(4);
-        $goalB = $this->tree->getNode(2);
-        $this->tree->moveBranchAsFirstChild($nodeB1, $goalB);
+        $nodeAfterGoalBefore = $this->tree->getNode(4);
+        $goalBeforeNode = $this->tree->getNode(2);
+        $this->tree->moveBranchAsFirstChild($nodeAfterGoalBefore, $goalBeforeNode);
 
-        $nodeB2 = $this->tree->getNode(4);
-        $this->assertSame(4, $nodeB2->getOrder());
-        $this->assertSame(2, $nodeB2->getDepth());
-        $this->assertSame(2, $nodeB2->getParent());
+        $nodeAfterGoalAfter = $this->tree->getNode(4);
+        $this->assertSame(4, $nodeAfterGoalAfter->getOrder());
+        $this->assertSame(2, $nodeAfterGoalAfter->getDepth());
+        $this->assertSame(2, $nodeAfterGoalAfter->getParent());
+
+        $nodeBeforeGoalBefore = $this->tree->getNode(4);
+        $goalAfterNode = $this->tree->getNode(7);
+        $this->tree->moveBranchAsFirstChild($nodeBeforeGoalBefore, $goalAfterNode);
+
+        $nodeBeforeGoalAfter = $this->tree->getNode(4);
+        $this->assertSame(6, $nodeBeforeGoalAfter->getOrder());
+        $this->assertSame(3, $nodeBeforeGoalAfter->getDepth());
+        $this->assertSame(7, $nodeBeforeGoalAfter->getParent());
+
+        $nodeBackBefore = $this->tree->getNode(4);
+        $goalPreviousBranch = $this->tree->getNode(2);
+        $this->tree->moveBranchAsFirstChild($nodeBackBefore, $goalPreviousBranch);
+
+        $nodeBackAfter = $this->tree->getNode(4);
+        $this->assertSame(4, $nodeBackAfter->getOrder());
+        $this->assertSame(2, $nodeBackAfter->getDepth());
+        $this->assertSame(2, $nodeBackAfter->getParent());
 
         $this->expectException(\Sakura\Exceptions\BadArgumentException::class);
         $nodeC1 = $this->tree->getNode(9);
@@ -225,37 +252,38 @@ class RepositoryTest extends \Tests\Base\TestCase
     /** @depends testRootMoveBranchAsFirstChild */
     public function testMoveBranchAfter(): void
     {
-        $nodeA1 = $this->tree->getNode(8);
-        $goalA = $this->tree->getNode(12);
-        $this->tree->moveBranchAfter($nodeA1, $goalA);
+        $branchAfterGoalBefore = $this->tree->getNode(8);
+        $goalBeforeBranch = $this->tree->getNode(12);
+        $this->tree->moveBranchAfter($branchAfterGoalBefore, $goalBeforeBranch);
 
-        $nodeA2 = $this->tree->getNode(8);
-        $this->assertSame(6, $nodeA2->getOrder());
-        $this->assertSame(3, $nodeA2->getDepth());
-        $this->assertSame(4, $nodeA2->getParent());
+        $branchAfterGoalAfter = $this->tree->getNode(8);
+        $this->assertSame(6, $branchAfterGoalAfter->getOrder());
+        $this->assertSame(3, $branchAfterGoalAfter->getDepth());
+        $this->assertSame(4, $branchAfterGoalAfter->getParent());
 
-        $nodeB1 = $this->tree->getNode(9);
-        $goalB = $this->tree->getNode(4);
-        $this->tree->moveBranchAfter($nodeB1, $goalB);
+        $branchInsideGoalBefore = $this->tree->getNode(9);
+        $goalOutsideBranch = $this->tree->getNode(4);
+        $this->tree->moveBranchAfter($branchInsideGoalBefore, $goalOutsideBranch);
 
-        $nodeB2 = $this->tree->getNode(9);
-        $this->assertSame(9, $nodeB2->getOrder());
-        $this->assertSame(2, $nodeB2->getDepth());
-        $this->assertSame(2, $nodeB2->getParent());
+        $branchInsideGoalAfter = $this->tree->getNode(9);
+        $this->assertSame(9, $branchInsideGoalAfter->getOrder());
+        $this->assertSame(2, $branchInsideGoalAfter->getDepth());
+        $this->assertSame(2, $branchInsideGoalAfter->getParent());
 
-        $nodeC1 = $this->tree->getNode(4);
-        $goalC = $this->tree->getNode(7);
-        $this->tree->moveBranchAfter($nodeC1, $goalC);
+        $branchBeforeGoalBefore = $this->tree->getNode(4);
+        $goalAfterBranch = $this->tree->getNode(7);
+        $this->tree->moveBranchAfter($branchBeforeGoalBefore, $goalAfterBranch);
 
-        $nodeC2 = $this->tree->getNode(4);
-        $this->assertSame(8, $nodeC2->getOrder());
-        $this->assertSame(2, $nodeC2->getDepth());
-        $this->assertSame(6, $nodeC2->getParent());
+        $branchBeforeGoalAfter = $this->tree->getNode(4);
+        $this->assertSame(8, $branchBeforeGoalAfter->getOrder());
+        $this->assertSame(2, $branchBeforeGoalAfter->getDepth());
+        $this->assertSame(6, $branchBeforeGoalAfter->getParent());
 
         $this->expectException(\Sakura\Exceptions\BadArgumentException::class);
-        $nodeD1 = $this->tree->getNode(2);
-        $goalD = $this->tree->getNode(13);
-        $this->tree->moveBranchAfter($nodeD1, $goalD);
+        $branchOverGoal = $this->tree->getNode(2);
+        $goalUnderBranch = $this->tree->getNode(13);
+        $this->tree->moveBranchAfter($branchOverGoal, $goalUnderBranch);
+        $this->tree->moveBranchAfter($nodeD1, $goalD);       
     }
 
     /** @depends testMoveBranchAfter */
@@ -313,6 +341,17 @@ class RepositoryTest extends \Tests\Base\TestCase
 
         $nodeList->next();
         $this->assertSame(14, $nodeList->current()->getId());
+    }
+
+    /** @depends testBranch */
+    public function testGetNodeListByParent(): void
+    {
+        $root = $this->tree->getRoot();
+        $nodeListA = $this->tree->getNodeListByParent($root->getId());
+        $this->assertSame(5, $nodeListA->count());
+        
+        $nodeListB = $this->tree->getNodeListByParent(9);
+        $this->assertSame(13, $nodeListB->current()->getId());
     }
 
 }
